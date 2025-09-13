@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github, Shield, Zap, Database } from 'lucide-react';
+import { ExternalLink, Github, Shield, Zap, Database, MessageCircle, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const projects = [
   {
@@ -171,7 +172,7 @@ export default function Projects() {
                   I'm constantly working on new projects and exploring innovative technologies. 
                   Follow my journey and see what I'm building next.
                 </p>
-                <Button 
+                <motion.button
                   onClick={() => {
                     const element = document.querySelector('#contact');
                     if (element) {
@@ -179,9 +180,18 @@ export default function Projects() {
                     }
                   }}
                   data-testid="button-discuss-project"
+                  className="group relative overflow-hidden rounded-xl px-8 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white font-semibold text-lg shadow-2xl transition-all duration-300 hover:shadow-purple-500/25 hover:scale-105"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  Discuss a Project
-                </Button>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative flex items-center justify-center gap-3">
+                    <MessageCircle className="h-5 w-5" />
+                    <span>Discuss a Project</span>
+                    <Sparkles className="h-4 w-4 opacity-80" />
+                  </div>
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+                </motion.button>
               </CardContent>
             </Card>
           </div>
