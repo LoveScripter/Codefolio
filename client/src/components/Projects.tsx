@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Github, Shield, Zap, Database, MessageCircle, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useToast } from '@/hooks/use-toast';
 
 const projects = [
   {
@@ -18,7 +19,10 @@ const projects = [
       'E-commerce integration'
     ],
     status: 'Production',
-    company: 'FoodBridge'
+    company: 'FoodBridge',
+    detailsUrl: 'https://linkedin.com/in/love-kumar-sharma-rr1150650',
+    codeUrl: null, // Private company project
+    isPrivate: true
   },
   {
     title: 'Custom AWS SQS Sync Library',
@@ -33,7 +37,10 @@ const projects = [
       'Cross-platform integration'
     ],
     status: 'Production',
-    company: 'Solutions Tree'
+    company: 'Solutions Tree',
+    detailsUrl: 'https://linkedin.com/in/love-kumar-sharma-rr1150650',
+    codeUrl: null, // Private company project
+    isPrivate: true
   },
   {
     title: 'Storefront Client Library',
@@ -48,11 +55,16 @@ const projects = [
       'Developer-friendly API'
     ],
     status: 'Production',
-    company: 'Solutions Tree'
+    company: 'Solutions Tree',
+    detailsUrl: 'https://linkedin.com/in/love-kumar-sharma-rr1150650',
+    codeUrl: 'https://github.com/lovekumar',
+    isPrivate: false
   }
 ];
 
 export default function Projects() {
+  const { toast } = useToast();
+  
   return (
     <section id="projects" className="py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -141,8 +153,19 @@ export default function Projects() {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => console.log(`View ${project.title} details`)}
+                      onClick={() => {
+                        if (project.detailsUrl) {
+                          window.open(project.detailsUrl, '_blank', 'noopener,noreferrer');
+                        } else {
+                          toast({
+                            title: "Details not available",
+                            description: "Project details are not currently available.",
+                          });
+                        }
+                      }}
+                      disabled={!project.detailsUrl}
                       data-testid={`button-view-${project.title.toLowerCase().replace(/\s+/g, '-')}`}
+                      aria-label={`View details for ${project.title}`}
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
                       View Details
@@ -150,8 +173,26 @@ export default function Projects() {
                     <Button 
                       variant="ghost" 
                       size="sm"
-                      onClick={() => console.log(`View ${project.title} code`)}
+                      onClick={() => {
+                        if (project.codeUrl) {
+                          window.open(project.codeUrl, '_blank', 'noopener,noreferrer');
+                        } else if (project.isPrivate) {
+                          toast({
+                            title: "Private Project",
+                            description: "This is a private company project. Source code is not publicly available.",
+                            variant: "default"
+                          });
+                        } else {
+                          toast({
+                            title: "Code not available",
+                            description: "Source code for this project is not currently available.",
+                          });
+                        }
+                      }}
+                      disabled={!project.codeUrl && !project.isPrivate}
                       data-testid={`button-code-${project.title.toLowerCase().replace(/\s+/g, '-')}`}
+                      aria-label={`View source code for ${project.title}`}
+                      title={project.isPrivate ? 'Private company project' : project.codeUrl ? 'View source code' : 'Code not available'}
                     >
                       <Github className="h-4 w-4" />
                     </Button>
