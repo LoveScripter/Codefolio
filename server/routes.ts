@@ -78,9 +78,9 @@ ${validatedData.message}
 This email was sent from your portfolio contact form.
       `;
 
-      // Send email
+      // Send email (use safe sender but show user's name)
       const info = await transporter.sendMail({
-        from: emailFrom,
+        from: `"${validatedData.name}" <${emailFrom}>`,
         to: emailTo,
         replyTo: validatedData.email,
         subject: `[Portfolio] ${validatedData.subject} — ${validatedData.name}`,

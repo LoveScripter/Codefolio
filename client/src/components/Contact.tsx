@@ -61,7 +61,15 @@ export default function Contact() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to send message');
+        if (result.details && Array.isArray(result.details)) {
+          // Handle validation errors with specific field details
+          const errorMessages = result.details.map((detail: any) => 
+            `${detail.field}: ${detail.message}`
+          ).join('. ');
+          throw new Error(errorMessages);
+        } else {
+          throw new Error(result.error || 'Failed to send message');
+        }
       }
       
       setIsSubmitted(true);
