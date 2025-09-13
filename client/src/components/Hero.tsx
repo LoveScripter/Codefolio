@@ -142,7 +142,14 @@ export default function Hero() {
 
             {/* Tertiary CTA - Download Resume */}
             <motion.button
-              onClick={() => console.log('Download resume triggered')}
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/assets/Love_Kumar_Resume.pdf';
+                link.download = 'Love_Kumar_Resume.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
               data-testid="button-download-resume"
               className="group relative overflow-hidden rounded-xl px-8 py-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white font-semibold text-lg shadow-xl transition-all duration-300 hover:shadow-emerald-500/25 hover:scale-105"
               whileHover={{ scale: 1.05 }}
