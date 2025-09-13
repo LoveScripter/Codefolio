@@ -50,11 +50,19 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      // TODO: Remove mock functionality - integrate with actual email service
-      console.log('Contact form submitted:', formData);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send message');
+      }
       
       setIsSubmitted(true);
       toast({
@@ -69,9 +77,10 @@ export default function Contact() {
       }, 3000);
       
     } catch (error) {
+      console.error('Contact form error:', error);
       toast({
         title: "Failed to Send Message",
-        description: "Please try again or contact me directly via email.",
+        description: error instanceof Error ? error.message : "Please try again or contact me directly via email.",
         variant: "destructive"
       });
     } finally {
